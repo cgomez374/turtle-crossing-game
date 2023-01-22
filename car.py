@@ -1,5 +1,4 @@
 from turtle import Turtle
-CAR_SPEED = 5
 
 
 class Car(Turtle):
@@ -10,11 +9,13 @@ class Car(Turtle):
         self.setheading(180)
         self.color(car_color)
         self.penup()
+        self.move_dist = 5
         self.goto(start_x, start_y)
 
-    def move(self, move_dist):
-        self.forward(move_dist)
+    def move(self):
+        self.forward(self.move_dist)
 
     def reset(self, new_x, new_y):
         self.goto(new_x, new_y)
+
 

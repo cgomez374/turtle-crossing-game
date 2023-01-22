@@ -1,38 +1,8 @@
 from turtle import Screen
-from random import randint, choice
 from player import Player
 from scoreboard import Scoreboard
-from car import Car
+from car_manager import CarManager
 import time
-
-
-# Create random coordinates for the cars
-
-def create_random_coord():
-    start_x = randint(280, 300)
-    start_y = randint(-250, 250)
-    return [start_x, start_y]
-
-
-# Create a single car to add one by one
-
-def create_single_car():
-    colors = ['red', 'blue', 'yellow', 'green', 'orange', 'purple']
-    rand_coord = create_random_coord()
-    car_color = choice(colors)
-    new_car = Car(car_color, rand_coord[0], rand_coord[1])
-    return new_car
-
-
-# Start the game with multiple cars
-
-def create_multiple_cars():
-    cars = []
-    for i in range(3):
-        cars.append(create_single_car())
-
-    return cars
-
 
 # Create the screen
 
@@ -48,7 +18,7 @@ player = Player()
 
 # Create the cars
 
-the_cars = create_multiple_cars()
+car_manager = CarManager()
 
 # Create the scoreboard
 
@@ -71,14 +41,12 @@ while is_game_on:
 
     # Move the cars
 
-    for car in the_cars:
-        car.move(5)
+    for car in car_manager.the_cars:
+        car.move()
 
         # Detect car collision with wall
 
-        if car.xcor() < -280:
-            new_coord = create_random_coord()
-            car.reset(new_coord[0], new_coord[1])
+        car_manager.detect_wall_collision(car)
 
         # Detect player and car collision
 
@@ -88,9 +56,9 @@ while is_game_on:
 
     # Add one more car
 
-    if time_elapsed == 0.7 and len(the_cars) <= 15:
+    if time_elapsed == 0.7 and len(car_manager.the_cars) <= 15:
         time_elapsed = 0
-        the_cars.append(create_single_car())
+        car_manager.create_single_car()
 
     # Player completes the level
 
@@ -98,34 +66,7 @@ while is_game_on:
         player.reset()
         scoreboard.level_up()
         wait_time *= 0.9
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        car_manager.increase_speed()
 
 # Click to close screen
 
